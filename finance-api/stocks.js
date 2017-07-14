@@ -15,7 +15,7 @@ module.exports.createEvent = (event, context, callback) => {
 
     if (typeof data.id !== 'string') {
         console.error('Validation Error: ID is not string');
-        callback(new Error('Validation error: ID must be string');
+        callback(new Error('Validation error: ID must be string'));
         return;
     }
     if (typeof data.eventDate !== 'string') {
