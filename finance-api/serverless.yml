@@ -63,6 +63,12 @@ functions:
        - http:
            path: stocks/create
            method: post
+  stockListEvents:
+      handler: stocks.listEvents
+      events:
+       - http:
+           path: stocks/list
+           method: get
  
 # you can add CloudFormation resource templates here
 resources:

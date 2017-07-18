@@ -45,3 +45,20 @@ module.exports.createEvent = (event, context, callback) => {
         callback(null, response);
     });
 };
+
+module.exports.listEvents = (event, context, callback) => {
+
+    ddb.scan(dbParams, (error, result) => {
+        if (error) {
+            console.error(error);
+            callback(new Error('Could not fetch table'));
+            return;
+        }
+
+        const response = {
+            statusCode: 200,
+            body: JSON.stringify(result.Items),
+        };
+        callback(null, response);
+    });
+};
