@@ -76,7 +76,7 @@ resources:
                   AttributeType: S
                 -
                   AttributeName: date
-                  AttributeType: S
+                  AttributeType: N
             KeySchema:
                 -
                   AttributeName: id

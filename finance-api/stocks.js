@@ -10,7 +10,7 @@ var dbParams = {
 
 module.exports.createEvent = (event, context, callback) => {
 
-    const timestamp = new Date().getTime();
+    const timeStamp = new Date().getTime();
     var data = JSON.parse(event.body);
 
     if (typeof data.id !== 'string') {
@@ -18,13 +18,13 @@ module.exports.createEvent = (event, context, callback) => {
         callback(new Error('Validation error: ID must be string'));
         return;
     }
-    if (typeof data.eventDate !== 'string') {
+    if (typeof data.date !== 'string') {
         console.error('Validation Error: set date to now');
-        data.eventDate = timestamp;
+        data.date = timeStamp;
     }
 
-    data.createdAt = timestamp;
-    data.updatedAt = timestamp;
+    data.createdAt = timeStamp;
+    data.updatedAt = timeStamp;
 
     dbParams.Item = data;
 
