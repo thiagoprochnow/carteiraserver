@@ -3,6 +3,12 @@
 const stocks = require('./libs/stocks');
 
 module.exports.stocksCreateEvent = (event, context, callback) => {
+
+    if (event.body !== '') {
+        callback(new Error('Body need contains item as JSON'));
+            return;
+    }
+
     stocks.createEvent(JSON.parse(event.body), (error, result) => {
         if (error) {
             console.error(error);
