@@ -2,14 +2,36 @@
 
 const stocks = require('./libs/stocks');
 
+function tryParseJSON (jsonString) {
+    try {
+        var o = JSON.parse(jsonString);
+
+        // Handle non-exception-throwing cases:
+        // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
+        // but... JSON.parse(null) returns null, and typeof null === "object", 
+        // so we must check for that, too. Thankfully, null is falsey, so this suffices:
+        if (o && typeof o === "object") {
+            return o;
+        }
+    }
+    catch (e) { }
+
+    return false;
+};
+
 module.exports.stocksCreateEvent = (event, context, callback) => {
 
-    if (event.body !== '') {
+    if (!event.body) {
         callback(new Error('Body need contains item as JSON'));
-            return;
+        return;
+    }
+    var jsonItem = tryParseJSON(event.body);
+    if (!jsonItem) {
+        callback(new Error('Body has not a valid JSON'));
+        return;
     }
 
-    stocks.createEvent(JSON.parse(event.body), (error, result) => {
+    stocks.createEvent(jsonItem, (error, result) => {
         if (error) {
             console.error(error);
             callback(error);
