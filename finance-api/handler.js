@@ -1,5 +1,40 @@
 'use strict';
 
+const stocks = require('./libs/stocks');
+
+module.exports.stocksCreateEvent = (event, context, callback) => {
+    stocks.createEvent(JSON.parse(event.body), (error, result) => {
+        if (error) {
+            console.error(error);
+            callback(error);
+            return;
+        }
+
+        // no error, so give back result
+        const response = {
+            statusCode: 200,
+            body: result,
+        };
+        callback(null, response);
+    });
+};
+
+module.exports.stocksListAllEvents = (event, context, callback) => {
+    stocks.listEvents( (error, result) => {
+        if (error) {
+            console.error(error);
+            callback(error);
+            return;
+        } 
+
+        const response = {
+            statusCode: 200,
+            body: result,
+        };
+        callback(null, response);
+    });
+};
+
 module.exports.hello = (event, context, callback) => {
   const response = {
     statusCode: 200,

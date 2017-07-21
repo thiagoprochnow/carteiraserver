@@ -58,13 +58,13 @@ functions:
           method: get
 
   stockCreateEvent:
-      handler: stocks.createEvent
+      handler: handler.stocksCreateEvent
       events:
        - http:
            path: stocks/create
            method: post
   stockListEvents:
-      handler: stocks.listEvents
+      handler: handler.stocksListAllEvents
       events:
        - http:
            path: stocks/list

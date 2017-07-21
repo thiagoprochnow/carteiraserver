@@ -5,13 +5,11 @@ const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-depe
 const ddb = new AWS.DynamoDB.DocumentClient();
 var dbParams = {
     TableName: process.env.DYNAMODB_TABLE_STOCK_EV,
+};
 
-}
-
-module.exports.createEvent = (event, context, callback) => {
+module.exports.createEvent = (data, callback) => {
 
     const timeStamp = new Date().getTime();
-    var data = JSON.parse(event.body);
 
     if (typeof data.id !== 'string') {
         console.error('Validation Error: ID is not string');
@@ -34,31 +32,21 @@ module.exports.createEvent = (event, context, callback) => {
         if (error) {
             console.error(error);
             callback(new Error('Couldn\´t create event'));
-            return;
         }
 
         // no error, let´s respond ok
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify(dbParams.Item),
-        };
-        callback(null, response);
+        callback(null, JSON.stringify(dbParams.Item));
     });
 };
 
-module.exports.listEvents = (event, context, callback) => {
+module.exports.listEvents = (callback) => {
 
     ddb.scan(dbParams, (error, result) => {
         if (error) {
             console.error(error);
             callback(new Error('Could not fetch table'));
-            return;
         }
 
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify(result.Items),
-        };
-        callback(null, response);
+        callback(null, JSON.stringify(result.Items));
     });
 };
