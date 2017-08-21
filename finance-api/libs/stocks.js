@@ -50,3 +50,44 @@ module.exports.listEvents = (callback) => {
         callback(null, JSON.stringify(result.Items));
     });
 };
+
+module.exports.deleteEvents = (data, callback) => {
+
+//    if (typeof data.id !== 'string') {
+//        console.error('Validation Error: ID is not string');
+//        callback(new Error('Validation error: ID must be string'));
+//        return;
+//    }
+
+    var eventsArray = [];
+
+    for (var i = 0; i < data.length; i++) {
+        var item = {
+            DeleteRequest : {
+                Key : {
+                    'id' : data[i].id,
+                    'date': data[i].date
+                }
+            }
+        };
+
+        eventsArray.push(item);
+    }
+
+    dbParams = {};
+    dbParams['RequestItems'] = {};
+    dbParams['RequestItems'][process.env.DYNAMODB_TABLE_STOCK_EV] = eventsArray;
+
+    // write to to table
+    ddb.batchWrite(dbParams, (error, data) => {
+        // Error?
+        if (error) {
+            console.error(error);
+            callback(new Error('Couldn\´t create event'));
+        }
+
+        // no error, let´s respond ok
+        callback(null, JSON.stringify(data));
+    });
+};
+

@@ -63,6 +63,34 @@ module.exports.stocksListAllEvents = (event, context, callback) => {
     });
 };
 
+module.exports.stocksDeleteEvents = (event, context, callback) => {
+
+    if (!event.body) {
+        callback(new Error('Body need contains items as JSON'));
+        return;
+    }
+    var jsonItem = tryParseJSON(event.body);
+    if (!jsonItem) {
+        callback(new Error('Body has not a valid JSON'));
+        return;
+    }
+
+    stocks.deleteEvents(jsonItem, (error, result) => {
+        if (error) {
+            console.error(error);
+            callback(error);
+            return;
+        }
+
+        // no error, so give back result
+        const response = {
+            statusCode: 200,
+            body: result,
+        };
+        callback(null, response);
+    });
+};
+
 module.exports.hello = (event, context, callback) => {
   const response = {
     statusCode: 200,
