@@ -9,6 +9,7 @@ public class Tesouro implements Serializable {
 	private double valor;
 	private String data;
 	private String tipo;
+	private String atualizado;
 	
 	public Long getId() {
 		return id;
@@ -41,8 +42,15 @@ public class Tesouro implements Serializable {
 		this.tipo = tipo;
 	}
 	
+	public String getAtualizado() {
+		return atualizado;
+	}
+	public void setAtualizado(String atualizado) {
+		this.atualizado = atualizado;
+	}
+	
 	@Override
 	public String toString() {
-		return "Tesouro [id= " + id + ", nome= " + nome + ", valor= " + valor + ", data= " + data + ", tipo= " + tipo + "]";
+		return "Tesouro [id= " + id + ", nome= " + nome + ", valor= " + valor + ", data= " + data + ", tipo= " + tipo + ", atualizado= " + atualizado + "]";
 	}
 }

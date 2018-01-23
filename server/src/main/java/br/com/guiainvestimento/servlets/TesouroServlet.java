@@ -1,6 +1,9 @@
 package br.com.guiainvestimento.servlets;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,13 +25,34 @@ public class TesouroServlet extends HttpServlet {
 		String valor = req.getParameter("valor");
 		String data_fim = req.getParameter("data_fim");
 		String tipo = req.getParameter("tipo");
-		resp.getWriter().print("Nome: " + nome + " , Valor: " + valor + " , Data Fim: " + data_fim + " , Tipo: " + tipo);
-		TesouroService service = new TesouroService();
-		Tesouro tesouro = new Tesouro();
-		tesouro.setNome(nome);
-		tesouro.setValor(Double.parseDouble(valor));
-		tesouro.setData(data_fim);
-		tesouro.setTipo(tipo);
-		service.save(tesouro);
+		
+		if(nome != "" && data_fim != "" && tipo != "") {
+			TesouroService service = new TesouroService();
+			Tesouro tesouro = new Tesouro();
+	
+			List<Tesouro> tesouros = service.findByName(nome);
+			
+			// Loads the one already saved, to update
+			if(!tesouros.isEmpty()) {
+				tesouro = service.findByName(nome).get(0);
+				resp.getWriter().print("Atualizar");
+			}
+
+			// Get date to save as last update date
+			String DATE_FORMAT_NOW = "dd/MM/yyyy";
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+			String atualizado = sdf.format(cal.getTime());
+			
+			tesouro.setNome(nome);
+			tesouro.setValor(Double.parseDouble(valor));
+			tesouro.setData(data_fim);
+			tesouro.setTipo(tipo);
+			tesouro.setAtualizado(atualizado);
+			service.save(tesouro);
+			
+			String contextPath= req.getContextPath();
+			resp.sendRedirect(resp.encodeRedirectURL(contextPath + "/tesouro/cadastroTesouro.jsp"));
+		}
 	}
 }

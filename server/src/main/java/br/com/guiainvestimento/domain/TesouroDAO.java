@@ -89,6 +89,7 @@ public class TesouroDAO extends BaseDAO{
 		tesouro.setValor(rs.getDouble("valor"));
 		tesouro.setData(rs.getString("data_fim"));
 		tesouro.setTipo(rs.getString("tipo"));
+		tesouro.setAtualizado(rs.getString("atualizado"));
 		return tesouro;
 	}
 	
@@ -98,17 +99,18 @@ public class TesouroDAO extends BaseDAO{
 		try {
 			conn = getConnection();
 			if(tesouro.getId() == null) {
-				stmt = conn.prepareStatement("insert into tesouro (nome,valor,data_fim,tipo) VALUES(?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+				stmt = conn.prepareStatement("insert into tesouro (nome,valor,data_fim,tipo,atualizado) VALUES(?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 			} else {
-				stmt = conn.prepareStatement("update tesouro set nome=?,valor=?,data_fim=?,tipo=? where id=?");
+				stmt = conn.prepareStatement("update tesouro set nome=?,valor=?,data_fim=?,tipo=?,atualizado=? where id=?");
 			}
 			stmt.setString(1, tesouro.getNome());
 			stmt.setDouble(2, tesouro.getValor());
 			stmt.setString(3, tesouro.getData());
 			stmt.setString(4, tesouro.getTipo());
+			stmt.setString(5, tesouro.getAtualizado());
 			if(tesouro.getId() != null) {
 				// Update
-				stmt.setLong(5, tesouro.getId());
+				stmt.setLong(6, tesouro.getId());
 			}
 			int count = stmt.executeUpdate();
 			if (count == 0) {
