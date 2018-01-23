@@ -4,4 +4,30 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <security-constraint>
+  	<display-name>User Authorization</display-name>
+  	<web-resource-collection>
+  		<web-resource-name>all</web-resource-name>
+  		<url-pattern>/*</url-pattern>
+  	</web-resource-collection>
+  	<auth-constraint>
+  		<role-name>admin</role-name>
+  	</auth-constraint>
+  </security-constraint>
+  
+  <security-constraint>
+  	<display-name>User Authorization</display-name>
+  	<web-resource-collection>
+  		<web-resource-name>all</web-resource-name>
+  		<url-pattern>/tesouro/*</url-pattern>
+  	</web-resource-collection>
+  	<auth-constraint>
+  		<role-name>admin</role-name>
+  	</auth-constraint>
+  </security-constraint>
+  
+  <login-config>
+  	<auth-method>BASIC</auth-method>
+  	<realm-name>Restrito</realm-name>
+  </login-config>
 </web-app>
