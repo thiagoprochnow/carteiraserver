@@ -35,7 +35,8 @@ public class TesouroServlet extends HttpServlet {
 			// Loads the one already saved, to update
 			if(!tesouros.isEmpty()) {
 				tesouro = service.findByName(nome).get(0);
-				resp.getWriter().print("Atualizar");
+			} else {
+				tesouro.setNome(nome);
 			}
 
 			// Get date to save as last update date
@@ -44,7 +45,6 @@ public class TesouroServlet extends HttpServlet {
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
 			String atualizado = sdf.format(cal.getTime());
 			
-			tesouro.setNome(nome);
 			tesouro.setValor(Double.parseDouble(valor));
 			tesouro.setData(data_fim);
 			tesouro.setTipo(tipo);

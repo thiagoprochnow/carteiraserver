@@ -8,19 +8,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TesouroDAO extends BaseDAO{
-	public Tesouro getTesouroById(Long id) throws SQLException{
+public class CdiDAO extends BaseDAO{
+	public Cdi getCdiById(Long id) throws SQLException{
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
 			conn = getConnection();
-			stmt = conn.prepareStatement("select * from tesouro where id=?");
+			stmt = conn.prepareStatement("select * from cdi where id=?");
 			stmt.setLong(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()) {
-				Tesouro tesouro = createTesouro(rs);
+				Cdi cdi = createCdi(rs);
 				rs.close();
-				return tesouro;
+				return cdi;
 			}
 		} finally {
 			if(stmt != null) {
@@ -33,18 +33,18 @@ public class TesouroDAO extends BaseDAO{
 		return null;
 	}
 	
-	public List<Tesouro> findByName(String name) throws SQLException {
-		List<Tesouro> tesouros = new ArrayList<>();
+	public List<Cdi> findByData(String data) throws SQLException {
+		List<Cdi> cdis = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
 			conn = getConnection();
-			stmt = conn.prepareStatement("select * from tesouro where lower(nome) like ?");
-			stmt.setString(1, "%" + name.toLowerCase() + "%");
+			stmt = conn.prepareStatement("select * from cdi where data_string like ?");
+			stmt.setString(1, "%" + data + "%");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				Tesouro tesouro = createTesouro(rs);
-				tesouros.add(tesouro);
+				Cdi cdi = createCdi(rs);
+				cdis.add(cdi);
 			}
 			rs.close();
 		} finally {
@@ -55,20 +55,20 @@ public class TesouroDAO extends BaseDAO{
 				conn.close();
 			}
 		}
-		return tesouros;
+		return cdis;
 	}
 	
-	public List<Tesouro> getTesouros() throws SQLException {
-		List<Tesouro> tesouros = new ArrayList<>();
+	public List<Cdi> getCdis() throws SQLException {
+		List<Cdi> cdis = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
 			conn = getConnection();
-			stmt = conn.prepareStatement("select * from tesouro");
+			stmt = conn.prepareStatement("select * from cdi");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				Tesouro tesouro = createTesouro(rs);
-				tesouros.add(tesouro);
+				Cdi cdi = createCdi(rs);
+				cdis.add(cdi);
 			}
 			rs.close();
 		} finally {
@@ -79,46 +79,44 @@ public class TesouroDAO extends BaseDAO{
 				conn.close();
 			}
 		}
-		return tesouros;
+		return cdis;
 	}
 	
-	public Tesouro createTesouro(ResultSet rs) throws SQLException{
-		Tesouro tesouro = new Tesouro();
-		tesouro.setId(rs.getLong("id"));
-		tesouro.setNome(rs.getString("nome"));
-		tesouro.setValor(rs.getDouble("valor"));
-		tesouro.setData(rs.getString("data_fim"));
-		tesouro.setTipo(rs.getString("tipo"));
-		tesouro.setAtualizado(rs.getString("atualizado"));
-		return tesouro;
+	public Cdi createCdi(ResultSet rs) throws SQLException{
+		Cdi cdi = new Cdi();
+		cdi.setId(rs.getLong("id"));
+		cdi.setValor(rs.getDouble("valor"));
+		cdi.setData(rs.getLong("data"));
+		cdi.setDataString(rs.getString("data_string"));
+		cdi.setAtualizado(rs.getString("atualizado"));
+		return cdi;
 	}
 	
-	public void save(Tesouro tesouro) throws SQLException {
+	public void save(Cdi cdi) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
 			conn = getConnection();
-			if(tesouro.getId() == null) {
-				stmt = conn.prepareStatement("insert into tesouro (nome,valor,data_fim,tipo,atualizado) VALUES(?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+			if(cdi.getId() == null) {
+				stmt = conn.prepareStatement("insert into cdi (valor,data,data_string,atualizado) VALUES(?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 			} else {
-				stmt = conn.prepareStatement("update tesouro set nome=?,valor=?,data_fim=?,tipo=?,atualizado=? where id=?");
+				stmt = conn.prepareStatement("update cdi set valor=?,data=?,data_string=?,atualizado=? where id=?");
 			}
-			stmt.setString(1, tesouro.getNome());
-			stmt.setDouble(2, tesouro.getValor());
-			stmt.setString(3, tesouro.getData());
-			stmt.setString(4, tesouro.getTipo());
-			stmt.setString(5, tesouro.getAtualizado());
-			if(tesouro.getId() != null) {
+			stmt.setDouble(1, cdi.getValor());
+			stmt.setLong(2, cdi.getData());
+			stmt.setString(3, cdi.getDataString());
+			stmt.setString(4, cdi.getAtualizado());
+			if(cdi.getId() != null) {
 				// Update
-				stmt.setLong(6, tesouro.getId());
+				stmt.setLong(5, cdi.getId());
 			}
 			int count = stmt.executeUpdate();
 			if (count == 0) {
-				throw new SQLException("Erro ao inserir o tesouro");
+				throw new SQLException("Erro ao inserir o cdi");
 			}
-			if(tesouro.getId() == null) {
+			if(cdi.getId() == null) {
 				Long id = getGeneratedId(stmt);
-				tesouro.setId(id);
+				cdi.setId(id);
 			}
 		} finally {
 			if(stmt != null) {
@@ -145,7 +143,7 @@ public class TesouroDAO extends BaseDAO{
 		PreparedStatement stmt = null;
 		try {
 			conn = getConnection();
-			stmt = conn.prepareStatement("delete from tesouro where id=?");
+			stmt = conn.prepareStatement("delete from cdi where id=?");
 			stmt.setLong(1, id);
 			int count = stmt.executeUpdate();
 			boolean ok = count > 0;
