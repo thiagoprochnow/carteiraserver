@@ -6,7 +6,7 @@
 <body>
 	<h2>Cadastro Tesouro</h2>
 	
-	<form method="post" action="<%=request.getContextPath()%>/cadastroTesouro">
+	<form method="post" action="<%=request.getContextPath()%>/gettesouro">
 		Nome:<br>
 		<input type="text" name="nome" />
 		<br><br>

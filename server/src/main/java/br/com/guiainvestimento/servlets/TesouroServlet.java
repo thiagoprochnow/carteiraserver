@@ -11,12 +11,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import br.com.guiainvestimento.domain.Tesouro;
 import br.com.guiainvestimento.domain.TesouroService;
+import br.com.guiainvestimento.util.RegexUtil;
+import br.com.guiainvestimento.util.ServletUtil;
 
-@WebServlet("/cadastroTesouro")
+@WebServlet("/gettesouro/*")
 public class TesouroServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	TesouroService service = new TesouroService();
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -27,7 +33,6 @@ public class TesouroServlet extends HttpServlet {
 		String tipo = req.getParameter("tipo");
 		
 		if(nome != "" && data_fim != "" && tipo != "") {
-			TesouroService service = new TesouroService();
 			Tesouro tesouro = new Tesouro();
 	
 			List<Tesouro> tesouros = service.findByName(nome);
@@ -54,5 +59,24 @@ public class TesouroServlet extends HttpServlet {
 			String contextPath= req.getContextPath();
 			resp.sendRedirect(resp.encodeRedirectURL(contextPath + "/tesouro/cadastroTesouro.jsp"));
 		}
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+		throws ServletException, IOException {
+			String requestUri = req.getRequestURI();
+			Long id = RegexUtil.matchTesouroId(requestUri);
+			if(id != null) {
+				Tesouro tesouro = service.getTesouro(id);
+				if(tesouro != null) {
+					Gson gson = new GsonBuilder().setPrettyPrinting().create();
+					String json = gson.toJson(tesouro);
+					ServletUtil.writeJSON(resp, json);
+				} else {
+					resp.sendError(404, "Tesouro não encontrado");
+				}
+			} else {
+				resp.sendError(404, "Tesouro ID não encontrado");
+			}
 	}
 }

@@ -25,14 +25,6 @@ public class TesouroService {
 		}
 	}
 	
-	public boolean delete(Long id) {
-		try {
-			return db.delete(id);
-		} catch (SQLException e) {
-			return false;
-		}
-	}
-	
 	public boolean save(Tesouro tesouro) {
 		try {
 			db.save(tesouro);

@@ -82,6 +82,31 @@ public class CdiDAO extends BaseDAO{
 		return cdis;
 	}
 	
+	public List<Cdi> getCdisByDate(Long timestamp) throws SQLException {
+		List<Cdi> cdis = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = getConnection();
+			stmt = conn.prepareStatement("select * from cdi where data > ? order by data asc");
+			stmt.setLong(1, timestamp);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Cdi cdi = createCdi(rs);
+				cdis.add(cdi);
+			}
+			rs.close();
+		} finally {
+			if(stmt != null) {
+				stmt.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return cdis;
+	}
+	
 	public Cdi createCdi(ResultSet rs) throws SQLException{
 		Cdi cdi = new Cdi();
 		cdi.setId(rs.getLong("id"));
@@ -136,25 +161,5 @@ public class CdiDAO extends BaseDAO{
 			return id;
 		}
 		return 0L;
-	}
-	
-	public boolean delete(Long id) throws SQLException {
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		try {
-			conn = getConnection();
-			stmt = conn.prepareStatement("delete from cdi where id=?");
-			stmt.setLong(1, id);
-			int count = stmt.executeUpdate();
-			boolean ok = count > 0;
-			return ok;
-		} finally {
-			if(stmt != null) {
-				stmt.close();
-			}
-			if(conn != null) {
-				conn.close();
-			}
-		}
 	}
 }

@@ -13,12 +13,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import br.com.guiainvestimento.domain.Cdi;
 import br.com.guiainvestimento.domain.CdiService;
+import br.com.guiainvestimento.util.RegexUtil;
+import br.com.guiainvestimento.util.ServletUtil;
 
-@WebServlet("/cadastroCDI")
+@WebServlet("/getcdi/*")
 public class CdiServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	CdiService service = new CdiService();
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -27,7 +33,6 @@ public class CdiServlet extends HttpServlet {
 		String data_string = req.getParameter("data_string");
 		
 		if(valor != "" && data_string != "") {
-			CdiService service = new CdiService();
 			Cdi cdi = new Cdi();
 	
 			List<Cdi> cdis = service.findByData(data_string);
@@ -63,6 +68,25 @@ public class CdiServlet extends HttpServlet {
 			
 			String contextPath= req.getContextPath();
 			resp.sendRedirect(resp.encodeRedirectURL(contextPath + "/cdi/cadastroCDI.jsp"));
+		}
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+		throws ServletException, IOException {
+		String requestUri = req.getRequestURI();
+		Long timestamp = RegexUtil.matchCdiDate(requestUri);
+		if(timestamp != null) {
+			List<Cdi> cdis = service.getCdisByDate(timestamp);
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String json = gson.toJson(cdis);
+			ServletUtil.writeJSON(resp, json);
+		} else {
+			// Todos os CDIs
+			List<Cdi> cdis = service.getCdis();
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String json = gson.toJson(cdis);
+			ServletUtil.writeJSON(resp, json);
 		}
 	}
 }

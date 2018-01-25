@@ -8,8 +8,8 @@ public class CdiService {
 	private CdiDAO db = new CdiDAO();
 	public List<Cdi> getCdis(){
 		try {
-			List<Cdi> tesouros = db.getCdis();
-			return tesouros;
+			List<Cdi> cdis = db.getCdis();
+			return cdis;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return new ArrayList<Cdi>();
@@ -25,11 +25,13 @@ public class CdiService {
 		}
 	}
 	
-	public boolean delete(Long id) {
+	public List<Cdi> getCdisByDate(Long timestamp){
 		try {
-			return db.delete(id);
+			List<Cdi> cdis = db.getCdisByDate(timestamp);
+			return cdis;
 		} catch (SQLException e) {
-			return false;
+			e.printStackTrace();
+			return new ArrayList<Cdi>();
 		}
 	}
 	
