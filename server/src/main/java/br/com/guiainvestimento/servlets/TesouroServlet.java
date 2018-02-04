@@ -32,7 +32,7 @@ public class TesouroServlet extends HttpServlet {
 		String data_fim = req.getParameter("data_fim");
 		String tipo = req.getParameter("tipo");
 		
-		if(nome != "" && data_fim != "" && tipo != "") {
+		if(nome != "") {
 			Tesouro tesouro = new Tesouro();
 	
 			List<Tesouro> tesouros = service.findByName(nome);
@@ -51,8 +51,12 @@ public class TesouroServlet extends HttpServlet {
 			String atualizado = sdf.format(cal.getTime());
 			
 			tesouro.setValor(Double.parseDouble(valor));
-			tesouro.setData(data_fim);
-			tesouro.setTipo(tipo);
+			if(!data_fim.isEmpty()) {
+				tesouro.setData(data_fim);
+			}
+			if(!tipo.isEmpty()) {
+				tesouro.setTipo(tipo);
+			}
 			tesouro.setAtualizado(atualizado);
 			service.save(tesouro);
 			
@@ -73,7 +77,11 @@ public class TesouroServlet extends HttpServlet {
 					String json = gson.toJson(tesouro);
 					ServletUtil.writeJSON(resp, json);
 				} else {
-					resp.sendError(404, "Tesouro não encontrado");
+					tesouro = new Tesouro();
+					tesouro.setError("error");
+					Gson gson = new GsonBuilder().setPrettyPrinting().create();
+					String json = gson.toJson(tesouro);
+					ServletUtil.writeJSON(resp, json);
 				}
 			} else {
 				resp.sendError(404, "Tesouro ID não encontrado");

@@ -13,6 +13,7 @@ public class Tesouro implements Serializable {
 	private String data;
 	private String tipo;
 	private String atualizado;
+	private String error;
 	
 	public Long getId() {
 		return id;
@@ -52,6 +53,12 @@ public class Tesouro implements Serializable {
 		this.atualizado = atualizado;
 	}
 	
+	public String getError() {
+		return error;
+	}
+	public void setError(String error) {
+		this.error = error;
+	}
 	@Override
 	public String toString() {
 		return "Tesouro [id= " + id + ", nome= " + nome + ", valor= " + valor + ", data= " + data + ", tipo= " + tipo + ", atualizado= " + atualizado + "]";
