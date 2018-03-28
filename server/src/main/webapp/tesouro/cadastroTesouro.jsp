@@ -1,3 +1,4 @@
+<%@page import="br.com.guiainvestimento.domain.Provento"%>
 <%@page import="br.com.guiainvestimento.domain.TesouroService"%>
 <%@page import="br.com.guiainvestimento.domain.Tesouro"%>
 <%@page import="java.util.List"%>
@@ -32,7 +33,7 @@
 			<td>ATUALIZADO</td>
 		</tr>
 		
-		<% TesouroService service = new TesouroService(); 
+		<% TesouroService service = new TesouroService();
 		   List<Tesouro> tesouros = service.getTesouros();
 		   String output = "";
 		   for (Tesouro tesouro : tesouros) {
