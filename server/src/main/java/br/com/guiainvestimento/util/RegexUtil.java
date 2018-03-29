@@ -12,7 +12,8 @@ public class RegexUtil {
 	private static final Pattern regexCdiAll = Pattern.compile("/getcdi");
 	private static final Pattern regexCdiDate = Pattern.compile("/getcdi/([0-9]*)");
 	private static final Pattern regexProventoAll = Pattern.compile("/getprovento");
-	private static final Pattern regexProventoDate = Pattern.compile("/getprovento/([0-9]*)");
+	private static final Pattern regexProventoCode = Pattern.compile("/getprovento/([A-Z0-9]{4}([0-9]|[0-9][0-9]))");
+	private static final Pattern regexProventoCodeData = Pattern.compile("/getprovento/([A-Z0-9]{4}([0-9]|[0-9][0-9]))/([0-9]*)");
 	private static final Pattern regexDate = Pattern.compile("^[0-9]+\\/[0-9]+\\/[0-9]+$");
 	private static final Pattern regexDouble = Pattern.compile("^[0-9]+,[0-9]+$");
 	private static final Pattern regexText = Pattern.compile("^[a-zA-Z]*$");
@@ -52,10 +53,20 @@ public class RegexUtil {
 	}
 	
 	// Provento
-	public static Long matchProventoDate(String requestUri) throws ServletException{
-		Matcher matcher = regexProventoDate.matcher(requestUri);
+	public static String matchProventoCode(String requestUri) throws ServletException{
+		Matcher matcher = regexProventoCode.matcher(requestUri);
 		if(matcher.find() && matcher.groupCount() > 0) {
 			String s = matcher.group(1);
+			return s;
+		}
+		return null;
+	}
+	
+	// Provento
+	public static Long matchProventoDate(String requestUri) throws ServletException{
+		Matcher matcher = regexProventoCodeData.matcher(requestUri);
+		if(matcher.find() && matcher.groupCount() > 0) {
+			String s = matcher.group(3);
 			if(s != null && s.trim().length() > 0) {
 				Long id = Long.parseLong(s);
 				return id;

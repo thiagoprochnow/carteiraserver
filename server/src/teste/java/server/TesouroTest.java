@@ -37,8 +37,6 @@ public class TesouroTest extends TestCase {
 		tesouro = tesouroService.getTesouro(id);
 		assertEquals("NTNB 2018", tesouro.getNome());
 		
-		tesouroService.delete(id);
-		
 		tesouro = tesouroService.getTesouro(id);
 		assertNull(tesouro);
 	}

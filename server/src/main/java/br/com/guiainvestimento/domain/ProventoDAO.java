@@ -88,7 +88,7 @@ public class ProventoDAO extends BaseDAO{
 		PreparedStatement stmt = null;
 		try {
 			conn = getConnection();
-			stmt = conn.prepareStatement("select * from provento where codigo like ?");
+			stmt = conn.prepareStatement("select * from provento where codigo like ? order by data desc");
 			stmt.setString(1, "%" + codigo + "%");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -136,9 +136,11 @@ public class ProventoDAO extends BaseDAO{
 	public Provento createProvento(ResultSet rs) throws SQLException{
 		Provento provento = new Provento();
 		provento.setId(rs.getLong("id"));
+		provento.setCodigo(rs.getString("codigo"));
 		provento.setValor(rs.getDouble("valor"));
 		provento.setData(rs.getString("data_string"));
 		provento.setTimestamp(rs.getLong("data"));
+		provento.setTipo(rs.getString("tipo"));;
 		provento.setAtualizado(rs.getString("atualizado"));
 		return provento;
 	}

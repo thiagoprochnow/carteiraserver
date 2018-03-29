@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -92,8 +93,16 @@ public class ProventoService {
         String line = null;
     	boolean start = false;
     	List<Provento> proventos = new ArrayList<>();
+    	
+		// Get date to save as last update date
+		String DATE_FORMAT_NOW = "dd/MM/yyyy";
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+		String atualizado = sdf.format(cal.getTime());
+    	
     	Provento provento = new Provento();
     	provento.setCodigo(codigo);
+    	provento.setAtualizado(atualizado);
         // read each line and write to System.out
         while ((line = br.readLine()) != null) {
         	// Start reading each <tr> and setting values
@@ -137,6 +146,7 @@ public class ProventoService {
         				// Clear for new income
         				provento = new Provento();
         				provento.setCodigo(codigo);
+        		    	provento.setAtualizado(atualizado);
         			}
         		}
         	}

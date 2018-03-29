@@ -14,14 +14,19 @@
 		<input type="text" name="data" />
 		<br><br>
 		Valor:<br>
-		<input type="number" name="valor" />
+		<input type="text" name="valor" />
 		<br><br>
 		Tipo:<br>
-		<input type="text" name="tipo" />
+		<select name="tipo">
+			<option value="FII" selected="selected">FII</option>
+			<option value="DIV">DIV</option>
+			<option value="JCP">JCP</option>
+		</select>
 		<br><br>
-		<input type="submit" name="Enviar" />
-		<br><br><br>
-		
+		<input type="submit" name="enviar" value="Enviar" />
+		<br><br><br><br><br>
+		<input type="submit" name="atualizar" value="Atualizar Dados" />
+		<br><br><br><br><br>
 		<table width="600" border="1">
 		<tr>
 			<td>ID</td>
