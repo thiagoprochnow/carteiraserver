@@ -107,7 +107,7 @@ public class ProventoDAO extends BaseDAO{
 		return proventos;
 	}
 	
-	public List<Provento> getProventoByDate(Long timestamp, String codigo) throws SQLException {
+	public List<Provento> getProventoByDateCode(Long timestamp, String codigo) throws SQLException {
 		List<Provento> proventos = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -116,6 +116,31 @@ public class ProventoDAO extends BaseDAO{
 			stmt = conn.prepareStatement("select * from provento where codigo like ? and data > ? order by data asc");
 			stmt.setString(1, "%" + codigo + "%");
 			stmt.setLong(2, timestamp);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Provento provento = createProvento(rs);
+				proventos.add(provento);
+			}
+			rs.close();
+		} finally {
+			if(stmt != null) {
+				stmt.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return proventos;
+	}
+	
+	public List<Provento> getProventoByDate(long timestamp) throws SQLException {
+		List<Provento> proventos = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = getConnection();
+			stmt = conn.prepareStatement("select * from provento where data > ? order by data desc");
+			stmt.setLong(1, timestamp);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Provento provento = createProvento(rs);

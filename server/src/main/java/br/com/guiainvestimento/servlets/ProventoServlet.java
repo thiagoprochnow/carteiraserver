@@ -34,6 +34,7 @@ public class ProventoServlet extends HttpServlet {
 		throws ServletException, IOException{
 		
 		if(req.getParameter("enviar") != null) {
+			String id = req.getParameter("id");
 			String codigo = req.getParameter("codigo");
 			String data = req.getParameter("data");
 			String valor = req.getParameter("valor");
@@ -41,6 +42,9 @@ public class ProventoServlet extends HttpServlet {
 			
 			if(codigo != "") {
 				Provento provento = new Provento();
+				if(id != "") {
+					provento = service.getProvento(Long.valueOf(id));
+				}
 	
 				// Get date to save as last update date
 				String DATE_FORMAT_NOW = "dd/MM/yyyy";
@@ -105,7 +109,7 @@ public class ProventoServlet extends HttpServlet {
 		String codigo = RegexUtil.matchProventoCode(requestUri);
 		Long timestamp = RegexUtil.matchProventoDate(requestUri);
 		if(timestamp != null) {
-			List<Provento> proventos = service.getProventoByData(timestamp, codigo);
+			List<Provento> proventos = service.getProventoByDateCode(timestamp, codigo);
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			String json = gson.toJson(proventos);
 			ServletUtil.writeJSON(resp, json);

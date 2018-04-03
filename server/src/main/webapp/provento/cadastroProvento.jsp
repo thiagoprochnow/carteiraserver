@@ -17,11 +17,10 @@
 		<input type="text" name="valor" />
 		<br><br>
 		Tipo:<br>
-		<select name="tipo">
-			<option value="FII" selected="selected">FII</option>
-			<option value="DIV">DIV</option>
-			<option value="JCP">JCP</option>
-		</select>
+		<input type="text" name="tipo" />
+		<br><br>
+		Id:<br>
+		<input type="text" name="id" />
 		<br><br>
 		<input type="submit" name="enviar" value="Enviar" />
 		<br><br><br><br><br>
@@ -38,8 +37,10 @@
 			<td>ATUALIZADO</td>
 		</tr>
 		
-		<% ProventoService service = new ProventoService(); 
-		   List<Provento> proventos = service.getProventos();
+		<% ProventoService service = new ProventoService();
+		   // Timestamp of 1 de January de 2018 às 18:44:02
+		   long timestamp = 1514832242;
+		   List<Provento> proventos = service.getProventoByDate(timestamp);
 		   String output = "";
 		   for (Provento provento : proventos) {
 			   output += "<tr>";

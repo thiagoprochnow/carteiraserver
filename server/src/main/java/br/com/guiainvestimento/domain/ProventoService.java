@@ -52,9 +52,18 @@ public class ProventoService {
 		}
 	}
 	
-	public List<Provento> getProventoByData(long timestamp, String codigo){
+	public List<Provento> getProventoByDateCode(long timestamp, String codigo){
 		try {
-			return db.getProventoByDate(timestamp, codigo);
+			return db.getProventoByDateCode(timestamp, codigo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Provento> getProventoByDate(long timestamp){
+		try {
+			return db.getProventoByDate(timestamp);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -120,7 +129,7 @@ public class ProventoService {
         				} catch (ParseException e) {
         					e.printStackTrace();
         				}
-        				Long timestamp = date.getTime();
+        				Long timestamp = date.getTime()/1000;
         				
         				provento.setData(value);
         				provento.setTimestamp(timestamp);
