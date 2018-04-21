@@ -14,6 +14,7 @@ public class RegexUtil {
 	private static final Pattern regexProventoAll = Pattern.compile("/getprovento");
 	private static final Pattern regexProventoCode = Pattern.compile("/getprovento/([A-Z0-9]{4}([0-9]|[0-9][0-9]))");
 	private static final Pattern regexProventoCodeData = Pattern.compile("/getprovento/([A-Z0-9]{4}([0-9]|[0-9][0-9]))/([0-9]*)");
+	private static final Pattern regexIpcaAll = Pattern.compile("/getipca");
 	private static final Pattern regexDate = Pattern.compile("^[0-9]+\\/[0-9]+\\/[0-9]+$");
 	private static final Pattern regexDouble = Pattern.compile("^[0-9]+,[0-9]+$");
 	private static final Pattern regexText = Pattern.compile("^[a-zA-Z]*$");
@@ -77,6 +78,14 @@ public class RegexUtil {
 	
 	public boolean matchAllProvento(String requestUri) throws ServletException {
 		Matcher matcher = regexProventoAll.matcher(requestUri);
+		if (matcher.find()) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean matchAllIpca(String requestUri) throws ServletException {
+		Matcher matcher = regexIpcaAll.matcher(requestUri);
 		if (matcher.find()) {
 			return true;
 		}
