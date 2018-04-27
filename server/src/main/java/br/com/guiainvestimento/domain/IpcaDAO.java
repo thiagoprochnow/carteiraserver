@@ -62,11 +62,7 @@ public class IpcaDAO extends BaseDAO{
 		ipca.setId(rs.getLong("id"));
 		ipca.setAno(rs.getInt("ano"));
 		ipca.setMes(rs.getInt("mes"));
-		ipca.setUm(rs.getDouble("um"));
-		ipca.setTres(rs.getDouble("tres"));
-		ipca.setSeis(rs.getDouble("seis"));
-		ipca.setDoze(rs.getDouble("doze"));
-		ipca.setAnual(rs.getDouble("anual"));
+		ipca.setValor(rs.getDouble("valor"));
 		ipca.setAtualizado(rs.getString("atualizado"));
 		return ipca;
 	}
@@ -77,21 +73,17 @@ public class IpcaDAO extends BaseDAO{
 		try {
 			conn = getConnection();
 			if(ipca.getId() == null) {
-				stmt = conn.prepareStatement("insert into ipca (ano,mes,um,tres,seis,doze,anual,atualizado) VALUES(?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+				stmt = conn.prepareStatement("insert into ipca (ano,mes,valor,atualizado) VALUES(?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 			} else {
-				stmt = conn.prepareStatement("update ipca set ano=?,mes=?,um=?,tres=?,seis=?,doze=?,anual=?,atualizado=? where id=?");
+				stmt = conn.prepareStatement("update ipca set ano=?,mes=?,valor=?,atualizado=? where id=?");
 			}
 			stmt.setDouble(1, ipca.getAno());
 			stmt.setDouble(2, ipca.getMes());
-			stmt.setDouble(3, ipca.getUm());
-			stmt.setDouble(4, ipca.getTres());
-			stmt.setDouble(5, ipca.getSeis());
-			stmt.setDouble(6, ipca.getDoze());
-			stmt.setDouble(7, ipca.getAnual());
-			stmt.setString(8, ipca.getAtualizado());
+			stmt.setDouble(3, ipca.getValor());
+			stmt.setString(4, ipca.getAtualizado());
 			if(ipca.getId() != null) {
 				// Update
-				stmt.setLong(9, ipca.getId());
+				stmt.setLong(5, ipca.getId());
 			}
 			int count = stmt.executeUpdate();
 			if (count == 0) {

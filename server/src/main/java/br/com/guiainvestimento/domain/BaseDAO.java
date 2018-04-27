@@ -16,11 +16,11 @@ public class BaseDAO {
 	
 	protected Connection getConnection() throws SQLException {
 		// URL de conex�o com o banco de dados
-		//String url = "jdbc:mysql://35.199.125.153:3306/guiainvestimento";
-		String url = "jdbc:mysql://localhost/guiainvestimento";
+		String url = "jdbc:mysql://35.199.125.153:3306/guiainvestimento";
+		//String url = "jdbc:mysql://localhost/guiainvestimento";
 		// Conecta utilizando a URL, usuario e senha
-		//Connection conn = DriverManager.getConnection(url, "guiauser", "thp1133");
-		Connection conn = DriverManager.getConnection(url, "guiauser", "user1133");
+		Connection conn = DriverManager.getConnection(url, "guiauser", "thp1133");
+		//Connection conn = DriverManager.getConnection(url, "guiauser", "user1133");
 		return conn;
 	}
 	

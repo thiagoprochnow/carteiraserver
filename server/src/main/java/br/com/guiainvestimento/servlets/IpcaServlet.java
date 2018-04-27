@@ -34,13 +34,9 @@ public class IpcaServlet extends HttpServlet {
 		String id = req.getParameter("id");
 		String ano = req.getParameter("ano");
 		String mes = req.getParameter("mes");
-		String um = req.getParameter("um");
-		String tres = req.getParameter("tres");
-		String seis = req.getParameter("seis");
-		String doze = req.getParameter("doze");
-		String anual = req.getParameter("anual");
+		String valor = req.getParameter("valor");
 			
-		if(ano != "" && mes != "" && um != "" && tres != "" && seis != "" && doze != "" && anual != "") {
+		if(ano != "" && mes != "" && valor != "") {
 			Ipca ipca = new Ipca();
 			if(id != "") {
 				ipca = service.getIpca(Long.valueOf(id));
@@ -54,11 +50,7 @@ public class IpcaServlet extends HttpServlet {
 				
 			ipca.setAno(Integer.parseInt(ano));
 			ipca.setMes(Integer.parseInt(mes));
-			ipca.setUm(Double.parseDouble(um));
-			ipca.setTres(Double.parseDouble(tres));
-			ipca.setSeis(Double.parseDouble(seis));
-			ipca.setDoze(Double.parseDouble(doze));
-			ipca.setAnual(Double.parseDouble(anual));
+			ipca.setValor(Double.valueOf(valor));
 			ipca.setAtualizado(atualizado);
 
 			service.save(ipca);
