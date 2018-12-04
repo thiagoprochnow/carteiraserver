@@ -53,7 +53,6 @@ public class ProventoServlet extends HttpServlet {
 				String atualizado = sdf.format(cal.getTime());
 				
 				provento.setCodigo(codigo);
-				provento.setData(data);
 				
 				// Get date timestamp
 				long timestamp = 0;
@@ -61,10 +60,14 @@ public class ProventoServlet extends HttpServlet {
 				// Date in timestamp
 				try {
 					Date date = sdf.parse(data);
-					timestamp = date.getTime()/1000;
+					// Bovespa shows the Negotiation date and not the ex income date, subtracting 1 will give the ex date
+					Date dayBefore = new Date(date.getTime() - (1 * 24 * 3600 * 1000));
+					timestamp = dayBefore.getTime()/1000;
+					data = sdf.format(dayBefore);
 				} catch (ParseException e) {
 				    e.printStackTrace();
 				}
+				provento.setData(data);
 				provento.setTimestamp(timestamp);
 				
 				provento.setValor(Double.parseDouble(valor));

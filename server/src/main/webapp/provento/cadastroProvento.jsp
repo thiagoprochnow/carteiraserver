@@ -24,8 +24,6 @@
 		<br><br>
 		<input type="submit" name="enviar" value="Enviar" />
 		<br><br><br><br><br>
-		<input type="submit" name="atualizar" value="Atualizar Dados" />
-		<br><br><br><br><br>
 		<table width="600" border="1">
 		<tr>
 			<td>ID</td>
