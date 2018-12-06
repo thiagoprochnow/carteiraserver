@@ -15,6 +15,8 @@ public class RegexUtil {
 	private static final Pattern regexProventoCode = Pattern.compile("/getprovento/([A-Z0-9]{4}([0-9]|[0-9][0-9]))");
 	private static final Pattern regexProventoCodeData = Pattern.compile("/getprovento/([A-Z0-9]{4}([0-9]|[0-9][0-9]))/([0-9]*)");
 	private static final Pattern regexIpcaAll = Pattern.compile("/getipca");
+	private static final Pattern regexFundNome = Pattern.compile("/getfundnome/(.*)");
+	private static final Pattern regexFundCnpj = Pattern.compile("/getfundcnpj/(.*)");
 	private static final Pattern regexDate = Pattern.compile("^[0-9]+\\/[0-9]+\\/[0-9]+$");
 	private static final Pattern regexDouble = Pattern.compile("^[0-9]+,[0-9]+$");
 	private static final Pattern regexText = Pattern.compile("^[a-zA-Z]*$");
@@ -90,6 +92,26 @@ public class RegexUtil {
 			return true;
 		}
 		return false;
+	}
+	
+	public static String matchFundName(String requestUri) throws ServletException {
+		Matcher matcher = regexFundNome.matcher(requestUri);
+		if(matcher.find() && matcher.groupCount() > 0) {
+			String s = matcher.group(1);
+			s = s.trim();
+			return s;
+		}
+		return "false";
+	}
+	
+	public static String matchFundCnpj(String requestUri) throws ServletException {
+		Matcher matcher = regexFundCnpj.matcher(requestUri);
+		if(matcher.find() && matcher.groupCount() > 0) {
+			String s = matcher.group(1);
+			s = s.trim();
+			return s;
+		}
+		return "false";
 	}
 	
 	// Util

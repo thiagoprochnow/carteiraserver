@@ -37,7 +37,7 @@
 		
 		<% ProventoService service = new ProventoService();
 		   // Timestamp of 1 de January de 2018 às 18:44:02
-		   long timestamp = 1514832242;
+		   long timestamp = 1543616000;
 		   List<Provento> proventos = service.getProventoByDate(timestamp);
 		   String output = "";
 		   for (Provento provento : proventos) {
