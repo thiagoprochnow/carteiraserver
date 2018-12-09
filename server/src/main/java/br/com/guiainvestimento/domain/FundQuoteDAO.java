@@ -40,8 +40,8 @@ public class FundQuoteDAO extends BaseDAO{
 		PreparedStatement stmt = null;
 		try {
 			conn = getConnection();
-			stmt = conn.prepareStatement("select * from cotas_fundos where cnpj like ?");
-			stmt.setString(1, "%" + cnpj + "%");
+			stmt = conn.prepareStatement("select * from cotas_fundos where cnpj = ? order by data asc");
+			stmt.setString(1, cnpj);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				FundQuote fund = createFundQuote(rs);
@@ -59,19 +59,20 @@ public class FundQuoteDAO extends BaseDAO{
 		return funds;
 	}
 	
-	public FundQuote findByCnpjData(String cnpj, Long timestamp) throws SQLException {
-		FundQuote fund = new FundQuote();
+	public List<FundQuote> findByCnpjData(String cnpj, Long timestamp) throws SQLException {
+		List<FundQuote> funds = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Timestamp ts = new Timestamp(timestamp*1000);
 		try {
 			conn = getConnection();
-			stmt = conn.prepareStatement("select * from cotas_fundos where cnpj = ? AND data > ? order by data asc LIMIT 1");
+			stmt = conn.prepareStatement("select * from cotas_fundos where cnpj = ? AND data > ? order by data asc");
 			stmt.setString(1, cnpj);
 			stmt.setTimestamp(2, ts);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				fund = createFundQuote(rs);
+				FundQuote fund = createFundQuote(rs);
+				funds.add(fund);
 			}
 			rs.close();
 		} finally {
@@ -82,7 +83,7 @@ public class FundQuoteDAO extends BaseDAO{
 				conn.close();
 			}
 		}
-		return fund;
+		return funds;
 	}
 	
 	public FundQuote findByCnpjLatest(String cnpj) throws SQLException {

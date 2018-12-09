@@ -17,7 +17,7 @@ public class RegexUtil {
 	private static final Pattern regexIpcaAll = Pattern.compile("/getipca");
 	private static final Pattern regexFundNome = Pattern.compile("/getfundnome/(.*)");
 	private static final Pattern regexFundCnpj = Pattern.compile("/getfundcnpj/(.*)");
-	private static final Pattern regexFundQuoteCnpjData = Pattern.compile("/getfundgain/(.{10}\\/.{7})/([0-9]*)");
+	private static final Pattern regexFundQuoteCnpjData = Pattern.compile("/getfundquotes/(.{10}\\/.{7})/([0-9]*)");
 	private static final Pattern regexDate = Pattern.compile("^[0-9]+\\/[0-9]+\\/[0-9]+$");
 	private static final Pattern regexDouble = Pattern.compile("^[0-9]+,[0-9]+$");
 	private static final Pattern regexText = Pattern.compile("^[a-zA-Z]*$");

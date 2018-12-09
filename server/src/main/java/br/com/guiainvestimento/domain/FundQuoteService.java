@@ -34,7 +34,7 @@ public class FundQuoteService {
 		}
 	}
 	
-	public FundQuote findByCnpjData(String cnpj, Long timestamp){
+	public List<FundQuote> findByCnpjData(String cnpj, Long timestamp){
 		try {
 			return db.findByCnpjData(cnpj,timestamp);
 		} catch (SQLException e) {

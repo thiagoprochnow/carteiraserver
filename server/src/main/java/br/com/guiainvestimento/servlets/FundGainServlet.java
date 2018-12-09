@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import br.com.guiainvestimento.domain.Fund;
-import br.com.guiainvestimento.domain.FundGain;
 import br.com.guiainvestimento.domain.FundQuote;
 import br.com.guiainvestimento.domain.FundQuoteService;
 import br.com.guiainvestimento.domain.FundService;
@@ -25,7 +24,7 @@ import br.com.guiainvestimento.domain.TesouroService;
 import br.com.guiainvestimento.util.RegexUtil;
 import br.com.guiainvestimento.util.ServletUtil;
 
-@WebServlet("/getfundgain/*")
+@WebServlet("/getfundquotes/*")
 public class FundGainServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	FundQuoteService service = new FundQuoteService();
@@ -35,20 +34,13 @@ public class FundGainServlet extends HttpServlet {
 		throws ServletException, IOException {
 			String requestUri = req.getRequestURI();
 			String cnpj = RegexUtil.matchFundQuoteCnpj(requestUri);
-			Long timestamp = RegexUtil.matchFundQuoteTimestamp(requestUri);
+			long timestamp = RegexUtil.matchFundQuoteTimestamp(requestUri);
 			cnpj = URLDecoder.decode(cnpj, "UTF-8");
 			if(cnpj != null && cnpj != "false") {
-				FundQuote fund = service.findByCnpjData(cnpj,timestamp);
-				FundQuote latestFund = service.findByCnpjLatest(cnpj);
-				if(fund != null && latestFund != null) {
+				List<FundQuote> funds = service.findByCnpjData(cnpj,timestamp);
+				if(funds != null) {
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
-					long fundQuote = Long.parseLong(fund.getQuote().replace(".", ""));
-					long latestQuote = Long.parseLong(latestFund.getQuote().replace(".", ""));
-					double rate = (double)latestQuote/fundQuote;
-					FundGain fundGain = new FundGain();
-					fundGain.setCnpj(cnpj);
-					fundGain.setRate(String.valueOf(rate));
-					String json = gson.toJson(fundGain);
+					String json = gson.toJson(funds);
 					ServletUtil.writeJSON(resp, json);
 				} else {
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
