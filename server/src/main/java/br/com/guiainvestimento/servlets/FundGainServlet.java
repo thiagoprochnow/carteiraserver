@@ -34,10 +34,10 @@ public class FundGainServlet extends HttpServlet {
 		throws ServletException, IOException {
 			String requestUri = req.getRequestURI();
 			String cnpj = RegexUtil.matchFundQuoteCnpj(requestUri);
-			long timestamp = RegexUtil.matchFundQuoteTimestamp(requestUri);
+			String data = RegexUtil.matchFundQuoteData(requestUri);
 			cnpj = URLDecoder.decode(cnpj, "UTF-8");
 			if(cnpj != null && cnpj != "false") {
-				List<FundQuote> funds = service.findByCnpjData(cnpj,timestamp);
+				List<FundQuote> funds = service.findByCnpjData(cnpj,data);
 				if(funds != null) {
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String json = gson.toJson(funds);

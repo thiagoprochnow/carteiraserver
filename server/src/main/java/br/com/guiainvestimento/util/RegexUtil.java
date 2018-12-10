@@ -17,7 +17,7 @@ public class RegexUtil {
 	private static final Pattern regexIpcaAll = Pattern.compile("/getipca");
 	private static final Pattern regexFundNome = Pattern.compile("/getfundnome/(.*)");
 	private static final Pattern regexFundCnpj = Pattern.compile("/getfundcnpj/(.*)");
-	private static final Pattern regexFundQuoteCnpjData = Pattern.compile("/getfundquotes/(.{10}\\/.{7})/([0-9]*)");
+	private static final Pattern regexFundQuoteCnpjData = Pattern.compile("/getfundquotes/(.{10}\\/.{7})/([0-9]{4}-[0-9]{2}-[0-9]{2})");
 	private static final Pattern regexDate = Pattern.compile("^[0-9]+\\/[0-9]+\\/[0-9]+$");
 	private static final Pattern regexDouble = Pattern.compile("^[0-9]+,[0-9]+$");
 	private static final Pattern regexText = Pattern.compile("^[a-zA-Z]*$");
@@ -127,13 +127,12 @@ public class RegexUtil {
 	}
 	
 	// Fund Quote timestamp
-	public static Long matchFundQuoteTimestamp(String requestUri) throws ServletException{
+	public static String matchFundQuoteData(String requestUri) throws ServletException{
 		Matcher matcher = regexFundQuoteCnpjData.matcher(requestUri);
 		if(matcher.find() && matcher.groupCount() > 0) {
 			String s = matcher.group(2);
 			if(s != null && s.trim().length() > 0) {
-				Long id = Long.parseLong(s);
-				return id;
+				return s;
 			}
 		}
 		return null;

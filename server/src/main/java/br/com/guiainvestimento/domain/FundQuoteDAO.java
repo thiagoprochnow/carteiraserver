@@ -1,11 +1,15 @@
 package br.com.guiainvestimento.domain;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,16 +63,22 @@ public class FundQuoteDAO extends BaseDAO{
 		return funds;
 	}
 	
-	public List<FundQuote> findByCnpjData(String cnpj, Long timestamp) throws SQLException {
+	public List<FundQuote> findByCnpjData(String cnpj, String data) throws Exception {
 		List<FundQuote> funds = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		Timestamp ts = new Timestamp(timestamp*1000);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    	Date date = new Date(new java.util.Date().getTime());
+	    try {
+	    	date = new java.sql.Date(formatter.parse(data).getTime());
+	    } catch (ParseException e) {            
+	        throw e;
+	    }
 		try {
 			conn = getConnection();
 			stmt = conn.prepareStatement("select * from cotas_fundos where cnpj = ? AND data > ? order by data asc");
 			stmt.setString(1, cnpj);
-			stmt.setTimestamp(2, ts);
+			stmt.setDate(2, date);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				FundQuote fund = createFundQuote(rs);
