@@ -12,8 +12,8 @@ public class RegexUtil {
 	private static final Pattern regexCdiAll = Pattern.compile("/getcdi");
 	private static final Pattern regexCdiDate = Pattern.compile("/getcdi/([0-9]*)");
 	private static final Pattern regexProventoAll = Pattern.compile("/getprovento");
-	private static final Pattern regexProventoCode = Pattern.compile("/getprovento/([A-Z0-9]{4}([0-9]|[0-9][0-9]))");
-	private static final Pattern regexProventoCodeData = Pattern.compile("/getprovento/([A-Z0-9]{4}([0-9]|[0-9][0-9]))/([0-9]*)");
+	private static final Pattern regexProventoCode = Pattern.compile("/getprovento/([A-Z0-9]{4}([0-9][0-9][A-Z]|[0-9][0-9]|[0-9]))");
+	private static final Pattern regexProventoCodeData = Pattern.compile("/getprovento/([A-Z0-9]{4}([0-9][0-9][A-Z]|[0-9][0-9]|[0-9]))/([0-9]*)");
 	private static final Pattern regexIpcaAll = Pattern.compile("/getipca");
 	private static final Pattern regexFundNome = Pattern.compile("/getfundnome/(.*)");
 	private static final Pattern regexFundCnpj = Pattern.compile("/getfundcnpj/(.*)");
